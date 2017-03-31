@@ -8,6 +8,14 @@ export interface Node {
   loc: SourceLocation | null;
   start: number;
   end: number;
+
+  leadingComments?: Array<Comment> | null;
+  trailingComments?: Array<Comment> | null;
+  innerComments?: Array<Comment> | null;
+
+  extra: {
+    [key: string]: any,
+  };
 }
 
 /**
@@ -25,6 +33,17 @@ export interface SourceLocation {
 export interface SourcePosition {
   line: number;
   column: number;
+}
+
+/**
+ *
+ */
+export interface Comment {
+  type: "CommentBlock" | "CommentLine";
+  value: string;
+  start: number;
+  end: number;
+  loc: SourceLocation;
 }
 
 /**

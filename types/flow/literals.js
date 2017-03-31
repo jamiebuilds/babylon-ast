@@ -35,8 +35,9 @@ export interface StringLiteralTypeAnnotation extends LiteralTypeAnnotation {
   type: "StringLiteralTypeAnnotation";
   value: string;
   extra: {
-    rawValue: string;
-    raw: string;
+    rawValue: string,
+    raw: string,
+    [key: string]: any,
   };
 }
 
@@ -47,7 +48,8 @@ export interface NumericLiteralTypeAnnotation extends LiteralTypeAnnotation {
   type: "NumericLiteralTypeAnnotation";
   value: string;
   extra: {
-    rawValue: number;
-    raw: string;
+    rawValue: number,
+    raw: string,
+    [key: string]: any,
   };
 }
