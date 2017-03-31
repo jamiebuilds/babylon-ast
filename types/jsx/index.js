@@ -50,6 +50,7 @@ export interface JSXSpreadChild extends Node {
  */
 export interface JSXIdentifier extends Expression {
   type: "JSXIdentifier";
+  name: string;
 }
 
 /**
