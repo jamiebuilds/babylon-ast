@@ -35,11 +35,20 @@ export interface ClassBody extends Node {
 export interface ClassMethod extends Method {
   type: "ClassMethod";
   key: Expression;
-  kind: "constructor" | "method" | "get" | "set";
+  kind: ClassMethodKind;
   computed: boolean;
   isStatic: boolean;
   decorators: Array<Decorator>;
 }
+
+/**
+ *
+ */
+export type ClassMethodKind =
+  | "constructor"
+  | "method"
+  | "get"
+  | "set";
 
 /**
  *

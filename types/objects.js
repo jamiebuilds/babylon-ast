@@ -9,7 +9,7 @@ import type {Decorator} from "./decorators";
  */
 export interface ObjectExpression extends Expression {
   type: "ObjectExpression";
-  properties: Array<ObjectProperty | ObjectMethod | SpreadElement>;
+  properties: Array<ObjectMember | SpreadElement>;
 }
 
 /**
@@ -35,5 +35,13 @@ export interface ObjectProperty extends ObjectMember {
  */
 export interface ObjectMethod extends ObjectMember, Method {
   type: "ObjectMethod";
-  kind: "get" | "set" | "method";
+  kind: ObjectMethodKind;
 }
+
+/**
+ *
+ */
+export type ObjectMethodKind =
+  | "get"
+  | "set"
+  | "method";

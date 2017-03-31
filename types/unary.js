@@ -15,8 +15,8 @@ export interface ThisExpression extends Expression {
 export interface UnaryExpression extends Expression {
   type: "UnaryExpression";
   operator: UnaryOperator;
-  prefix: boolean;
   argument: Expression;
+  prefix: boolean;
 }
 
 /**
