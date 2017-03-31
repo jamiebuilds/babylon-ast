@@ -1,0 +1,10 @@
+{
+  "name": "babylon-ast",
+  "version": "0.0.0",
+  "main": "types/index.js",
+  "author": "James Kyle <me@thejameskyle.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "flow-bin": "^0.42.0"
+  }
+}
