@@ -4,7 +4,12 @@
   "main": "types/index.js",
   "author": "James Kyle <me@thejameskyle.com>",
   "license": "MIT",
+  "scripts": {
+    "build": "babel-node scripts/build.js"
+  },
   "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.0",
     "flow-bin": "^0.42.0"
   }
 }
