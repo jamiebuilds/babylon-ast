@@ -1,12 +1,16 @@
 // @flow
-import {typeOf} from "./_validators";
+import {typeOf, oneOf, nodeOf} from "./_define";
 
 export const Identifier = {
   type: "Identifier",
   extends: ["Expression", "Pattern"],
   fields: {
     name: typeOf("string"),
+    typeAnnotation: oneOf(nodeOf("TypeAnnotation"), typeOf('null')),
   },
-  builder: [],
-  visitor: [],
+  defaults: {
+    typeAnnotation: null,
+  },
+  builder: ["name", "typeAnnotation"],
+  visitor: ["typeAnnotation"],
 };

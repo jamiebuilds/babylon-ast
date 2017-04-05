@@ -1,5 +1,5 @@
 // @flow
-import {oneOf, nodeOf, typeOf} from "./_validators";
+import {oneOf, nodeOf, typeOf} from "./_define";
 
 export const WhileStatement = {
   type: "WhileStatement",
@@ -8,19 +8,19 @@ export const WhileStatement = {
     test: nodeOf("Expression"),
     body: nodeOf("Statement"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["test", "body"],
+  visitor: ["test", "body"],
 };
 
 export const DoWhileStatement = {
   type: "DoWhileStatement",
   extends: ["Statement"],
   fields: {
-    body: nodeOf("Statement"),
     test: nodeOf("Expression"),
+    body: nodeOf("Statement"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["test", "body"],
+  visitor: ["test", "body"],
 };
 
 export const ForStatement = {
@@ -32,8 +32,8 @@ export const ForStatement = {
     update: oneOf(nodeOf("Expression"), typeOf("null")),
     body: nodeOf("Statement"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["init", "test", "update", "body"],
+  visitor: ["init", "test", "update", "body"],
 };
 
 export const ForInStatement = {
@@ -44,8 +44,8 @@ export const ForInStatement = {
     right: nodeOf("Expression"),
     body: nodeOf("Statement"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["left", "right", "body"],
+  visitor: ["left", "right", "body"],
 };
 
 export const ForOfStatement = {
@@ -57,6 +57,6 @@ export const ForOfStatement = {
     body: nodeOf("Statement"),
     await: typeOf("boolean"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["left", "right", "body"],
+  visitor: ["left", "right", "body"],
 };

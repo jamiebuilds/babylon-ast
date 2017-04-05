@@ -1,18 +1,18 @@
 // @flow
-import {oneOf, nodeOf, typeOf} from "./_validators";
+import {oneOf, nodeOf, typeOf} from "./_define";
 
 export const FunctionDeclaration = {
   type: "FunctionDeclaration",
   extends: ["Method", "Declaration"],
-  builder: [],
-  visitor: [],
+  builder: ["id", "params", "body", "generator", "async"],
+  visitor: ["id", "params", "body", "returnType", "typeParameters"],
 };
 
 export const FunctionExpression = {
   type: "FunctionExpression",
   extends: ["Method", "Expression"],
-  builder: [],
-  visitor: [],
+  builder: ["id", "params", "body", "generator", "async"],
+  visitor: ["id", "params", "body", "returnType", "typeParameters"],
 };
 
 export const ArrowFunctionExpression = {
@@ -21,8 +21,8 @@ export const ArrowFunctionExpression = {
   fields: {
     expression: typeOf("boolean"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["params", "body", "async"],
+  visitor: ["params", "body", "returnType", "typeParameters"],
 };
 
 export const YieldExpression = {
@@ -32,8 +32,8 @@ export const YieldExpression = {
     argument: oneOf(nodeOf("Expression"), typeOf("null")),
     delegate: typeOf("boolean"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["argument", "delegate"],
+  visitor: ["argument"],
 };
 
 export const AwaitExpression = {
@@ -42,6 +42,6 @@ export const AwaitExpression = {
   fields: {
     argument: oneOf(nodeOf("Expression"), typeOf("null")),
   },
-  builder: [],
-  visitor: [],
+  builder: ["argument"],
+  visitor: ["argument"],
 };

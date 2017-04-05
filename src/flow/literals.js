@@ -1,5 +1,5 @@
 // @flow
-import {objectOf, arrayOf, oneOf, nodeOf, typeOf} from "../_validators";
+import {objectOf, arrayOf, oneOf, nodeOf, typeOf} from "../_define";
 
 export const LiteralTypeAnnotation = {
   extends: ["TypeAnnotation"],

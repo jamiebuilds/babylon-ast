@@ -1,5 +1,5 @@
 // @flow
-import {oneOf, arrayOf, nodeOf, typeOf} from "./_validators";
+import {aliasOf, oneOf, arrayOf, nodeOf, typeOf} from "./_define";
 
 export const MemberExpression = {
   type: "MemberExpression",
@@ -10,7 +10,7 @@ export const MemberExpression = {
     computed: typeOf("boolean"),
   },
   builder: ["object", "property", "computed"],
-  visitor: [],
+  visitor: ["object", "property"],
 };
 
 export const BindExpression = {
@@ -21,7 +21,7 @@ export const BindExpression = {
     callee: arrayOf(nodeOf("Expression")),
   },
   builder: ["object", "callee"],
-  visitor: [],
+  visitor: ["object", "callee"],
 };
 
 export const BinaryOperator = oneOf(
@@ -52,12 +52,12 @@ export const BinaryExpression = {
   type: "BinaryExpression",
   extends: ["Expression"],
   fields: {
-    operator: BinaryOperator,
+    operator: aliasOf("BinaryOperator"),
     left: nodeOf("Expression"),
     right: nodeOf("Expression"),
   },
   builder: ["operator", "left", "right"],
-  visitor: [],
+  visitor: ["left", "right"],
 };
 
 export const AssignmentOperator = oneOf(
@@ -79,12 +79,12 @@ export const AssignmentExpression = {
   type: "AssignmentExpression",
   extends: ["Expression"],
   fields: {
-    operator: AssignmentOperator,
+    operator: aliasOf("AssignmentOperator"),
     left: oneOf(nodeOf("Pattern"), nodeOf("MemberExpression"), nodeOf("CallExpression"), nodeOf("NewExpression")),
     right: nodeOf("Expression"),
   },
   builder: ["operator", "left", "right"],
-  visitor: [],
+  visitor: ["left", "right"],
 };
 
 export const LogicalOperator = oneOf(
@@ -96,10 +96,10 @@ export const LogicalExpression = {
   type: "LogicalExpression",
   extends: ["Expression"],
   fields: {
-    operator: LogicalOperator,
+    operator: aliasOf("LogicalOperator"),
     left: nodeOf("Expression"),
     right: nodeOf("Expression"),
   },
   builder: ["operator", "left", "right"],
-  visitor: [],
+  visitor: ["left", "right"],
 };

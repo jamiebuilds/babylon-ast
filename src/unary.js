@@ -1,5 +1,5 @@
 // @flow
-import {oneOf, nodeOf, typeOf} from "./_validators";
+import {aliasOf, oneOf, nodeOf, typeOf} from "./_define";
 
 export const UnaryOperator = oneOf(
   "-",
@@ -15,12 +15,12 @@ export const UnaryExpression = {
   type: "UnaryExpression",
   extends: ["Expression"],
   fields: {
-    operator: UnaryOperator,
+    operator: aliasOf("UnaryOperator"),
     argument: nodeOf("Expression"),
     prefix: typeOf("boolean"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["operator", "argument", "prefix"],
+  visitor: ["argument"],
 };
 
 export const UpdateOperator = oneOf(
@@ -32,10 +32,10 @@ export const UpdateExpression = {
   type: "UpdateExpression",
   extends: ["Expression"],
   fields: {
-    operator: UpdateOperator,
+    operator: aliasOf("UpdateOperator"),
     argument: oneOf(nodeOf("Pattern"), nodeOf("CallExpression"), nodeOf("NewExpression")),
     prefix: typeOf("boolean"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["operator", "argument", "prefix"],
+  visitor: ["argument"],
 };

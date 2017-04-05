@@ -1,5 +1,5 @@
 // @flow
-import {arrayOf, oneOf, nodeOf, typeOf} from "./_validators";
+import {arrayOf, oneOf, nodeOf, typeOf} from "./_define";
 
 export const ArrayExpression = {
   type: "ArrayExpression",
@@ -8,5 +8,5 @@ export const ArrayExpression = {
     elements: arrayOf(oneOf(nodeOf("Expression"), nodeOf("SpreadElement"), typeOf("null"))),
   },
   builder: ["elements"],
-  visitor: [],
+  visitor: ["elements"],
 };

@@ -1,5 +1,5 @@
 // @flow
-import {nodeOf} from "./_validators";
+import {nodeOf} from "./_define";
 
 export const WithStatement = {
   type: "WithStatement",
@@ -8,6 +8,6 @@ export const WithStatement = {
     object: nodeOf("Expression"),
     body: nodeOf("Statement"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["object", "body"],
+  visitor: ["object", "body"],
 };

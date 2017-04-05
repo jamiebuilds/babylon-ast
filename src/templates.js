@@ -1,5 +1,27 @@
 // @flow
-import {oneOf, objectOf, arrayOf, nodeOf, typeOf} from "./_validators";
+import {oneOf, objectOf, arrayOf, nodeOf, typeOf} from "./_define";
+
+export const TaggedTemplateExpression = {
+  type: "TaggedTemplateExpression",
+  extends: ["Expression"],
+  fields: {
+    tag: nodeOf("Expression"),
+    quasi: nodeOf("TemplateLiteral"),
+  },
+  builder: ["tag", "quasi"],
+  visitor: ["tag", "quasi"],
+};
+
+export const TemplateLiteral = {
+  type: "TemplateLiteral",
+  extends: ["Expression"],
+  fields: {
+    quasis: arrayOf(nodeOf("TemplateElement")),
+    expressions: arrayOf(nodeOf("Expression")),
+  },
+  builder: ["quasis", "expressions"],
+  visitor: ["quasis", "expressions"],
+};
 
 export const TemplateElement = {
   type: "TemplateElement",
@@ -11,28 +33,6 @@ export const TemplateElement = {
       raw: typeOf("string"),
     }),
   },
-  builder: [],
-  visitor: [],
-};
-
-export const TemplateLiteral = {
-  type: "TemplateLiteral",
-  extends: ["Expression"],
-  fields: {
-    quasis: arrayOf(nodeOf("TemplateElement")),
-    expressions: arrayOf(nodeOf("Expression")),
-  },
-  builder: [],
-  visitor: [],
-};
-
-export const TaggedTemplateExpression = {
-  type: "TaggedTemplateExpression",
-  extends: ["Expression"],
-  fields: {
-    tag: nodeOf("Expression"),
-    quasi: nodeOf("TemplateLiteral"),
-  },
-  builder: [],
+  builder: ["value", "tail"],
   visitor: [],
 };

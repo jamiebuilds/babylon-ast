@@ -1,3 +1,17 @@
+export function nodeOf(node) {
+  return {
+    validator: 'nodeOf',
+    nodeOf: node,
+  };
+}
+
+export function aliasOf(alias) {
+  return {
+    validator: 'aliasOf',
+    aliasOf: alias
+  };
+}
+
 export function arrayOf(validator) {
   return {
     validator: 'arrayOf',
@@ -16,13 +30,6 @@ export function oneOf(...values) {
   return {
     validator: 'oneOf',
     oneOf: values
-  };
-}
-
-export function nodeOf(node) {
-  return {
-    validator: 'nodeOf',
-    nodeOf: node,
   };
 }
 

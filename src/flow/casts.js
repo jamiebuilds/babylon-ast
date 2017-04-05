@@ -1,5 +1,5 @@
 // @flow
-import {objectOf, nodeOf, typeOf} from "../_validators";
+import {objectOf, nodeOf, typeOf} from "../_define";
 
 export const TypeCastExpression = {
   type: "TypeCastExpression",
@@ -8,10 +8,10 @@ export const TypeCastExpression = {
     expression: nodeOf("Expression"),
     typeAnnotation: nodeOf("TypeAnnotation"),
     extra: objectOf({
-      parenthesized: typeOf("true"),
+      parenthesized: typeOf("boolean"),
       parenStart: typeOf("number"),
     }),
   },
-  builder: [],
-  visitor: [],
+  builder: ["expression", "typeAnnotation"],
+  visitor: ["expression", "typeAnnotation"],
 };

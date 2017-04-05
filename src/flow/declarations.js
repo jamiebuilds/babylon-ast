@@ -1,5 +1,5 @@
 // @flow
-import {arrayOf, oneOf, nodeOf, typeOf} from "../_validators";
+import {aliasOf, arrayOf, oneOf, nodeOf, typeOf} from "../_define";
 
 export const DeclareVariable = {
   type: "DeclareVariable",
@@ -8,8 +8,8 @@ export const DeclareVariable = {
     id: nodeOf("Identifier"),
     typeAnnotation: nodeOf("TypeAnnotation"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["id", "typeAnnotation"],
+  visitor: ["id", "typeAnnotation"],
 };
 
 export const DeclareFunction = {
@@ -22,8 +22,8 @@ export const DeclareFunction = {
     rest: oneOf(nodeOf("FunctionTypeParam"), typeOf("null")),
     returnType: nodeOf("TypeAnnotation"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["id", "typeParameters", "params", "rest", "returnType"],
+  visitor: ["id", "typeParameters", "params", "rest", "returnType"],
 };
 
 export const DeclareClass = {
@@ -33,11 +33,11 @@ export const DeclareClass = {
     id: nodeOf("Identifier"),
     typeParameters: oneOf(nodeOf("TypeParameterDeclaration"), typeOf("null")),
     extends: arrayOf(nodeOf("InterfaceExtends")),
-    mixins: arrayOf(nodeOf("InterfaceExtends")),
+    // mixins: arrayOf(nodeOf("InterfaceExtends")),
     body: nodeOf("ObjectTypeAnnotation"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["id", "typeParameters", "extends", "body"],
+  visitor: ["id", "typeParameters", "extends", "body"],
 };
 
 export const DeclareInterface = {
@@ -50,8 +50,8 @@ export const DeclareInterface = {
     mixins: arrayOf(nodeOf("InterfaceExtends")),
     body: nodeOf("ObjectTypeAnnotation"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["id", "typeParameters", "extends", "body"],
+  visitor: ["id", "typeParameters", "extends", "body"],
 };
 
 export const DeclareTypeAlias = {
@@ -62,19 +62,19 @@ export const DeclareTypeAlias = {
     typeParameters: oneOf(nodeOf("TypeParameterDeclaration"), typeOf("null")),
     right: nodeOf("TypeAnnotation"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["id", "typeParameters", "right"],
+  visitor: ["id", "typeParameters", "right"],
 };
 
 export const DeclareModule = {
   type: "DeclareModule",
   extends: ["TypeDeclaration"],
   fields: {
-    name: oneOf(nodeOf("StringLiteral"), nodeOf("Identifier")),
+    id: oneOf(nodeOf("StringLiteral"), nodeOf("Identifier")),
     body: nodeOf("BlockStatement"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["id", "body"],
+  visitor: ["id", "body"],
 };
 
 export const DeclareExportValue = oneOf(
@@ -90,12 +90,12 @@ export const DeclareExport = {
   type: "DeclareExport",
   extends: ["TypeDeclaration"],
   fields: {
-    declaration: DeclareExportValue,
+    declaration: aliasOf("DeclareExportValue"),
     default: typeOf("boolean"),
     specifiers: arrayOf(nodeOf("ExportSpecifier")),
     source: oneOf(nodeOf("StringLiteral"), typeOf("null")),
   },
-  builder: [],
+  builder: ["declaration", "specifiers", "source", "default"],
   visitor: [],
 };
 
@@ -105,6 +105,6 @@ export const DeclareModuleExports = {
   fields: {
     typeAnnotation: nodeOf("TypeAnnotation"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["typeAnnotation"],
+  visitor: ["typeAnnotation"],
 };

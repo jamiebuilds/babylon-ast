@@ -1,5 +1,5 @@
 // @flow
-import {oneOf, nodeOf, typeOf} from "../_validators";
+import {oneOf, nodeOf, typeOf} from "../_define";
 
 export const ClassImplements = {
   type: "ClassImplements",
@@ -8,6 +8,6 @@ export const ClassImplements = {
     id: nodeOf("Identifier"),
     typeParameters: oneOf(nodeOf("TypeParameterInstantiation"), typeOf("null")),
   },
-  builder: [],
-  visitor: [],
+  builder: ["id", "typeParameters"],
+  visitor: ["id", "typeParameters"],
 };

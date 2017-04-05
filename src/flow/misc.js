@@ -1,5 +1,5 @@
 // @flow
-import {nodeOf} from "../_validators";
+import {nodeOf} from "../_define";
 
 export const QualifiedTypeIdentifier = {
   type: "QualifiedTypeIdentifier",

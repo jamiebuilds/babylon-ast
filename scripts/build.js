@@ -1,44 +1,52 @@
 // @flow
-import * as _types from "../src";
+import * as exported from "../src";
 import fs from "fs";
 import path from "path";
 
-const types = {};
+const definitions = {};
 const builders = {};
 const visitors = {};
 
-Object.keys(_types).filter(key => {
-  if (_types[key].validator) {
-    return false;
+Object.keys(exported).forEach(key => {
+  let definition = exported[key];
+
+  if (definition.validator) {
+    definitions[key] = {
+      key,
+      validator: definition,
+      isAbstract: true,
+      isValidator: true
+    };
   } else {
-    return true;
+    let isAbstract = definition.type ? false : true;
+
+    if (definition.type && definition.type !== key) {
+      throw new Error(`${definition.type} must be equal ${key}`);
+    }
+
+    if (!isAbstract) {
+      if (!definition.builder) throw new Error(`${key} must have a "builder" field`);
+      if (!definition.visitor) throw new Error(`${key} must have a "visitor" field`);
+    }
+
+    definitions[key] = {
+      key,
+      _extends: definition.extends || [],
+      _fields: definition.fields || {},
+      defaults: definition.defaults || {},
+      builder: definition.builder || [],
+      visitor: definition.visitor || [],
+      isAbstract,
+      isValidator: false
+    };
   }
-}).forEach(key => {
-  let type = _types[key];
-
-  if (type.type && type.type !== key) {
-    throw new Error(`${type.type} must be equal ${key}`);
-  }
-
-  let isAbstract = !type.type;
-
-  if (!isAbstract) {
-    if (!type.builder) throw new Error(`${key} must have a "builder" field`);
-    if (!type.visitor) throw new Error(`${key} must have a "visitor" field`);
-  }
-
-  types[key] = {
-    key,
-    _extends: type.extends || [],
-    _fields: type.fields || {},
-    builder: type.builder || [],
-    visitor: type.visitor || [],
-    isAbstract,
-  };
 });
 
-Object.keys(types).forEach(key => {
-  let type = types[key];
+const DEFINITION_KEYS = Object.keys(definitions);
+const TYPE_DEFINITION_KEYS = DEFINITION_KEYS.filter(t => !definitions[t].isValidator);
+
+TYPE_DEFINITION_KEYS.forEach(key => {
+  let definition = definitions[key];
   let mergedExtends = [key];
   let mergedFields = {};
   let validatorFields = {};
@@ -46,38 +54,69 @@ Object.keys(types).forEach(key => {
 
   let walk = t => {
     t._extends.forEach(key => {
-      walk(types[key]);
+      walk(definitions[key]);
       if (!mergedExtends.includes(key)) {
         mergedExtends.push(key);
       }
     });
   };
 
-  walk(type);
+  walk(definition);
 
   mergedExtends.forEach(extendKey => {
-    let extendType = types[extendKey];
-    Object.keys(extendType._fields).map(field => {
+    let extendDefinition = definitions[extendKey];
+    Object.keys(extendDefinition._fields).map(field => {
       if (mergedFields[field]) {
-        throw new Error(`Found duplicate field "${field}" in "${extendType.key}" as "${fieldSources[field]}" while merging "${key}"`)
+        throw new Error(`Found duplicate field "${field}" in "${extendDefinition.key}" as "${fieldSources[field]}" while merging "${key}"`)
       }
       fieldSources[field] = extendKey;
-      mergedFields[field] = extendType._fields[field];
-      if (extendKey !== "Node" && field !== "extra") {
+      mergedFields[field] = extendDefinition._fields[field];
+      if (field !== "extra") {
         validatorFields[field] = mergedFields[field];
       }
     });
   });
 
-  type.mergedExtends = mergedExtends;
-  type.fieldSources = fieldSources;
-  type.mergedFields = mergedFields;
-  type.validatorFields = validatorFields;
+  definition.mergedExtends = mergedExtends;
+  definition.fieldSources = fieldSources;
+  definition.mergedFields = mergedFields;
+  definition.validatorFields = validatorFields;
 
-  type.checkName = `is${type.key}`;
-  type.assertName = `assert${type.key}`;
-  type.validatorName = `validate${type.key}`;
-  type.builderName = type.key[0].toLowerCase() + type.key.slice(1);
+  if (definition.builder) {
+    definition.builder.forEach(field => {
+      if (!definition.mergedFields[field]) throw new Error(`Missing field "${field}" that exists in builder for ${definition.key}.`);
+    });
+  }
+
+  if (definition.visitor) {
+    definition.visitor.forEach(field => {
+      if (!definition.mergedFields[field]) throw new Error(`Missing field "${field}" that exists in visitor for ${definition.key}.`);
+    });
+  }
+
+});
+
+DEFINITION_KEYS.forEach(key => {
+  let definition = definitions[key];
+  definition.checkName = `is${definition.key}`;
+  definition.assertName = `assert${definition.key}`;
+  definition.validatorName = `validate${definition.key}`;
+  definition.builderName = definition.key[0].toLowerCase() + definition.key.slice(1);
+});
+
+
+TYPE_DEFINITION_KEYS.forEach(key => {
+  let validTypes = [];
+
+  TYPE_DEFINITION_KEYS.forEach(childKey => {
+    let mergedExtends = definitions[childKey].mergedExtends;
+
+    if (mergedExtends.includes(key)) {
+      validTypes.push(childKey);
+    }
+  });
+
+  definitions[key].validTypes = validTypes;
 });
 
 let printInterfacePropType = (fieldValidator) => {
@@ -89,6 +128,8 @@ let printInterfacePropType = (fieldValidator) => {
       return `"${validator}"`;
     } else if (kind === "nodeOf") {
       return validator.nodeOf;
+    } else if (kind === "aliasOf") {
+      return validator.aliasOf;
     } else if (kind === "typeOf") {
       return validator.typeOf;
     } else if (kind === "oneOf") {
@@ -122,11 +163,15 @@ let printValidatorCheck = (fieldValidator, fieldKey) => {
 
     if (type === "string") {
       return `${value} === "${validator}"`;
-    } else if (kind === "nodeOf") {
-      let checkName = types[validator.nodeOf].checkName;
-      return `${checkName}(${value})`;
+    } else if (kind === "nodeOf" || kind === "aliasOf") {
+      let checkName = definitions[validator.nodeOf || validator.aliasOf].checkName;
+      return `t.${checkName}(${value})`;
     } else if (kind === "typeOf") {
-      return `typeof ${value} === "${validator.typeOf}"`;
+      if (validator.typeOf === "null") {
+        return `${value} === null`;
+      } else {
+        return `typeof ${value} === "${validator.typeOf}"`;
+      }
     } else if (kind === "oneOf") {
       return `(${validator.oneOf.map(print).join(" || ")})`;
     } else if (kind === "arrayOf") {
@@ -146,72 +191,128 @@ let printValidatorCheck = (fieldValidator, fieldKey) => {
     }
   };
 
-  return `node.${fieldKey} && ${print(fieldValidator)}`;
+  return `node.${fieldKey} !== undefined && ${print(fieldValidator)}`;
 };
 
-let program = `// @flow
+let program = `/**
+ * Auto-generated script in babylon-types, do not modify manually.
+ * @flow
+ */
+
+const t = {};
 
 function assert(bool, message) {
   if (!bool) throw new Error(message);
 };
+
+type NodeLike = {
+  type: string,
+  [field: string]: any
+};
 `;
 
-Object.keys(types).forEach(typeKey => {
-  let type = types[typeKey];
+DEFINITION_KEYS.forEach(key => {
+  let definition = definitions[key];
 
   program += "\n";
 
-  let nodeInterface = "";
-  nodeInterface += `export interface ${type.key}`;
-  if (type._extends.length) {
-    nodeInterface += " extends ";
-    nodeInterface += type._extends.join(", ");
+  let typeDefinition = "";
+  if (!definition.isValidator) {
+    typeDefinition += `export interface ${definition.key}`;
+    if (definition._extends.length) {
+      typeDefinition += " extends ";
+      typeDefinition += definition._extends.join(", ");
+    }
+    typeDefinition += ` {`;
+    let fields = Object.keys(definition._fields);
+    if (fields.length) {
+      typeDefinition += Object.keys(definition._fields).map(fieldKey => {
+        let res = `\n  ${fieldKey}`
+        if (definition.key === 'Node' || fieldKey === 'extra') res += '?';
+        res += ': ' + printInterfacePropType(definition._fields[fieldKey]);
+        return res;
+      }).join(',');
+      typeDefinition += "\n";
+    }
+    typeDefinition += `}`;
+  } else {
+    typeDefinition += `export type ${definition.key} = `;
+    typeDefinition += printInterfacePropType(definition.validator);
+    typeDefinition += ";";
   }
-  nodeInterface += ` {`;
-  let fields = Object.keys(type._fields);
-  if (fields.length) {
-    nodeInterface += Object.keys(type._fields).map(fieldKey => {
-      return `\n  ${fieldKey}: ` + printInterfacePropType(type._fields[fieldKey]);
-    }).join(',');
-    nodeInterface += "\n";
+
+  program += `${typeDefinition}\n`;
+
+  if (!definition.isValidator) {
+    let check = "";
+    let checkConstant = `Valid${definition.key}NodeTypes`;
+
+    check += `\nconst ${checkConstant} = [`
+    check += definition.validTypes.map(t => `"${t}"`).join(', ');
+    check += '];';
+    check += `\n`;
+    check += `\nt.${definition.checkName} = (node: NodeLike): boolean => {`;
+    check += `\n  return ${checkConstant}.includes(node.type);`;
+    check += '\n};';
+
+    program += `${check}\n`;
   }
-  nodeInterface += `}`;
 
-  program += `${nodeInterface}\n\n`;
+  if (!definition.isValidator) {
+    let validator = "";
+    validator += `\nt.${definition.validatorName} = (node: NodeLike) => {`;
+    validator += `\n  assert(node.type === "${definition.key}", "\\"" + node.type + "\\" is not a \\"${definition.key}\\" node");`;
 
-  let validator = "";
-  validator += `export function ${type.validatorName}(node) {`;
-  validator += `\n  assert(node.type === "${type.key}", "\\"" + node.type + "\\" is not a \\"${type.key}\\" node");`;
+    Object.keys(definition.validatorFields).forEach(fieldKey => {
+      if (definition.fieldSources[fieldKey] === "Node") return;
+      validator += `\n  assert(`;
+      validator += printValidatorCheck(definition.validatorFields[fieldKey], fieldKey);
+      validator += `, "${definition.key} node field \\"${fieldKey}\\" is invalid");`
+    });
 
-  Object.keys(type.validatorFields).forEach(fieldKey => {
-    validator += `\n  assert(`;
-    validator += printValidatorCheck(type.validatorFields[fieldKey], fieldKey);
-    validator += `, "${type.key} node field \\"${fieldKey}\\" is invalid");`
-  });
+    validator += `\n};`;
 
-  validator += `\n}`;
+    program += `${validator}\n`;
+  }
 
-  program += `${validator}\n`;
-
-  if (!type.isAbstract) {
-    program += "\n";
+  if (!definition.isValidator && !definition.isAbstract) {
     let builder = "";
-    let builderParams = type.builder.join(", ");
-    builder += `export function ${type.builderName}(${builderParams}) {`;
+    let builderParams = definition.builder.map(field => {
+      let res = `_${field}: ${printInterfacePropType(definition.mergedFields[field])}`;
+      if (definition.defaults[field] !== undefined) {
+        res += ' = ';
+        res += JSON.stringify(definition.defaults[field]);
+      }
+      return res;
+    }).join(', ');
+    builder += `\nt.${definition.builderName} = t.${definition.key} = (${builderParams}) => {`;
     builder += `\n  let node = {`
-    builder += `\n    type: "${type.key}"`;
-    if (type.builder.length) {
-      builder += ",\n    ";
-      builder += type.builder.map(field => `${field}: ${field}`).join(',\n    ');
+    builder += `\n    type: "${definition.key}"`;
+
+    let fields = Object.keys(definition.mergedFields);
+
+    if (fields.length) {
+      fields.forEach((fieldKey, index) => {
+        if (definition.fieldSources[fieldKey] === "Node") return;
+        let hasDefault = definition.defaults[fieldKey] !== undefined;
+        let inBuilder = definition.builder.includes(fieldKey);
+        if (!hasDefault && !inBuilder) return;
+        builder += ",\n    ";
+        builder += `${fieldKey}: `;
+        if (inBuilder) builder += `_${fieldKey}`;
+        if (!inBuilder && hasDefault) builder += JSON.stringify(definition.defaults[fieldKey]);
+      });
     }
     builder += `\n  };`;
-    builder += `\n  ${type.validatorName}(node);`
+    builder += `\n  t.${definition.validatorName}(node);`
     builder += `\n  return node;`
-    builder += `\n}`;
+    builder += `\n};`;
 
     program += `${builder}\n`;
   }
 });
+
+program += '\nexport default t;\n';
 
 let libDir = path.join(__dirname, "..", "lib");
 try { fs.mkdirSync(libDir); } catch (e) {}

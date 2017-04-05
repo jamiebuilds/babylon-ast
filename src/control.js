@@ -1,5 +1,5 @@
 // @flow
-import {arrayOf, oneOf, nodeOf, typeOf} from "./_validators";
+import {arrayOf, oneOf, nodeOf, typeOf} from "./_define";
 
 export const ReturnStatement = {
   type: "ReturnStatement",
@@ -7,8 +7,8 @@ export const ReturnStatement = {
   fields: {
     argument: oneOf(nodeOf("Expression"), typeOf("null")),
   },
-  builder: [],
-  visitor: [],
+  builder: ["argument"],
+  visitor: ["argument"],
 };
 
 export const LabeledStatement = {
@@ -18,8 +18,8 @@ export const LabeledStatement = {
     label: nodeOf("Identifier"),
     body: nodeOf("Statement"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["label", "body"],
+  visitor: ["label", "body"],
 };
 
 export const BreakStatement = {
@@ -28,8 +28,8 @@ export const BreakStatement = {
   fields: {
     label: oneOf(nodeOf("Identifier"), typeOf("null")),
   },
-  builder: [],
-  visitor: [],
+  builder: ["label"],
+  visitor: ["label"],
 };
 
 export const ContinueStatement = {
@@ -38,8 +38,8 @@ export const ContinueStatement = {
   fields: {
     label: oneOf(nodeOf("Identifier"), typeOf("null")),
   },
-  builder: [],
-  visitor: [],
+  builder: ["label"],
+  visitor: ["label"],
 };
 
 export const IfStatement = {
@@ -50,19 +50,8 @@ export const IfStatement = {
     consequent: nodeOf("Statement"),
     alternate: oneOf(nodeOf("Statement"), typeOf("null")),
   },
-  builder: [],
-  visitor: [],
-};
-
-export const SwitchCase = {
-  type: "SwitchCase",
-  extends: ["Node"],
-  fields: {
-    test: oneOf(nodeOf("Expression"), typeOf("null")),
-    consequent: arrayOf(nodeOf("Statement")),
-  },
-  builder: [],
-  visitor: [],
+  builder: ["test", "consequent", "alternate"],
+  visitor: ["test", "consequent", "alternate"],
 };
 
 export const SwitchStatement = {
@@ -72,6 +61,17 @@ export const SwitchStatement = {
     discriminant: nodeOf("Expression"),
     cases: arrayOf(nodeOf("SwitchCase")),
   },
-  builder: [],
-  visitor: [],
+  builder: ["discriminant", "cases"],
+  visitor: ["discriminant", "cases"],
+};
+
+export const SwitchCase = {
+  type: "SwitchCase",
+  extends: ["Node"],
+  fields: {
+    test: oneOf(nodeOf("Expression"), typeOf("null")),
+    consequent: arrayOf(nodeOf("Statement")),
+  },
+  builder: ["test", "consequent"],
+  visitor: ["test", "consequent"],
 };

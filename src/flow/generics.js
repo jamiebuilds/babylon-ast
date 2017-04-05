@@ -1,5 +1,5 @@
 // @flow
-import {arrayOf, nodeOf, typeOf} from "../_validators";
+import {arrayOf, nodeOf, typeOf} from "../_define";
 
 export const GenericTypeAnnotation = {
   type: "GenericTypeAnnotation",

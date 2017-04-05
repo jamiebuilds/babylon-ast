@@ -1,5 +1,5 @@
 // @flow
-import {nodeOf} from "./_validators";
+import {nodeOf} from "./_define";
 
 export const MetaProperty = {
   type: "MetaProperty",
@@ -8,6 +8,6 @@ export const MetaProperty = {
     meta: nodeOf("Identifier"),
     property: nodeOf("Identifier"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["meta", "property"],
+  visitor: ["meta", "property"],
 };

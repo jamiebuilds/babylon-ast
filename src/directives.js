@@ -1,5 +1,5 @@
 // @flow
-import {nodeOf, typeOf} from "./_validators";
+import {nodeOf, typeOf} from "./_define";
 
 export const Directive = {
   type: "Directive",
@@ -7,8 +7,8 @@ export const Directive = {
   fields: {
     value: nodeOf("DirectiveLiteral"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["value"],
+  visitor: ["value"],
 };
 
 export const DirectiveLiteral = {
@@ -17,6 +17,6 @@ export const DirectiveLiteral = {
   fields: {
     value: typeOf("string"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["value"],
+  visitor: ["value"],
 };

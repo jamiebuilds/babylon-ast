@@ -1,5 +1,5 @@
 // @flow
-import {nodeOf} from "./_validators";
+import {nodeOf} from "./_define";
 
 export const ConditionalExpression = {
   type: "ConditionalExpression",
@@ -9,6 +9,6 @@ export const ConditionalExpression = {
     alternate: nodeOf("Expression"),
     consequent: nodeOf("Expression"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["test", "consequent", "alternate"],
+  visitor: ["test", "consequent", "alternate"],
 };

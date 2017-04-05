@@ -1,8 +1,8 @@
 // @flow
-import {oneOf, arrayOf, nodeOf, typeOf} from "../_validators";
+import {oneOf, arrayOf, nodeOf, typeOf} from "../_define";
 
-export const JsxIdentifier = {
-  type: "JsxIdentifier",
+export const JSXIdentifier = {
+  type: "JSXIdentifier",
   extends: ["Expression"],
   fields: {
     name: typeOf("string"),
@@ -11,71 +11,71 @@ export const JsxIdentifier = {
   visitor: [],
 };
 
-export const JsxNamespacedName = {
-  type: "JsxNamespacedName",
+export const JSXNamespacedName = {
+  type: "JSXNamespacedName",
   extends: ["Node"],
   fields: {
-    namespace: nodeOf("JsxIdentifier"),
-    name: nodeOf("JsxIdentifier"),
+    namespace: nodeOf("JSXIdentifier"),
+    name: nodeOf("JSXIdentifier"),
   },
   builder: [],
   visitor: [],
 };
 
-export const JsxAttribute = {
-  type: "JsxAttribute",
+export const JSXAttribute = {
+  type: "JSXAttribute",
   extends: ["Node"],
   fields: {
-    name: oneOf(nodeOf("JsxIdentifier"), nodeOf("JsxNamespacedName")),
-    value: oneOf(nodeOf("JsxElement"), nodeOf("StringLiteral"), nodeOf("JsxExpressionContainer"), typeOf("null")),
+    name: oneOf(nodeOf("JSXIdentifier"), nodeOf("JSXNamespacedName")),
+    value: oneOf(nodeOf("JSXElement"), nodeOf("StringLiteral"), nodeOf("JSXExpressionContainer"), typeOf("null")),
   },
   builder: [],
   visitor: [],
 };
 
-export const JsxClosingElement = {
-  type: "JsxClosingElement",
+export const JSXClosingElement = {
+  type: "JSXClosingElement",
   extends: ["Node"],
   fields: {
-    name: oneOf(nodeOf("JsxIdentifier"), nodeOf("JsxMemberExpression")),
+    name: oneOf(nodeOf("JSXIdentifier"), nodeOf("JSXMemberExpression")),
   },
   builder: [],
   visitor: [],
 };
 
-export const JsxOpeningElement = {
-  type: "JsxOpeningElement",
+export const JSXOpeningElement = {
+  type: "JSXOpeningElement",
   extends: ["Node"],
   fields: {
-    name: oneOf(nodeOf("JsxIdentifier"), nodeOf("JsxMemberExpression")),
+    name: oneOf(nodeOf("JSXIdentifier"), nodeOf("JSXMemberExpression")),
     selfClosing: typeOf("boolean"),
-    attributes: arrayOf(oneOf(nodeOf("JsxAttribute"), nodeOf("JsxSpreadAttribute"))),
+    attributes: arrayOf(oneOf(nodeOf("JSXAttribute"), nodeOf("JSXSpreadAttribute"))),
   },
   builder: [],
   visitor: [],
 };
 
-export const JsxElement = {
-  type: "JsxElement",
+export const JSXElement = {
+  type: "JSXElement",
   extends: ["Expression"],
   fields: {
-    openingElement: nodeOf("JsxOpeningElement"),
-    closingElement: oneOf(nodeOf("JsxClosingElement"), typeOf("null")),
-    children: arrayOf(oneOf(nodeOf("JsxText"), nodeOf("JsxExpressionContainer"), nodeOf("JsxSpreadChild"), nodeOf("JsxElement"))),
+    openingElement: nodeOf("JSXOpeningElement"),
+    closingElement: oneOf(nodeOf("JSXClosingElement"), typeOf("null")),
+    children: arrayOf(oneOf(nodeOf("JSXText"), nodeOf("JSXExpressionContainer"), nodeOf("JSXSpreadChild"), nodeOf("JSXElement"))),
   },
   builder: [],
   visitor: [],
 };
 
-export const JsxEmptyExpression = {
-  type: "JsxEmptyExpression",
+export const JSXEmptyExpression = {
+  type: "JSXEmptyExpression",
   extends: ["Expression"],
   builder: [],
   visitor: [],
 };
 
-export const JsxExpressionContainer = {
-  type: "JsxExpressionContainer",
+export const JSXExpressionContainer = {
+  type: "JSXExpressionContainer",
   extends: ["Node"],
   fields: {
     expression: nodeOf("Expression"),
@@ -84,8 +84,8 @@ export const JsxExpressionContainer = {
   visitor: [],
 };
 
-export const JsxSpreadChild = {
-  type: "JsxSpreadChild",
+export const JSXSpreadChild = {
+  type: "JSXSpreadChild",
   extends: ["Node"],
   fields: {
     expression: nodeOf("Expression"),
@@ -94,19 +94,19 @@ export const JsxSpreadChild = {
   visitor: [],
 };
 
-export const JsxMemberExpression = {
-  type: "JsxMemberExpression",
+export const JSXMemberExpression = {
+  type: "JSXMemberExpression",
   extends: ["Expression"],
   fields: {
-    object: oneOf(nodeOf("JsxMemberExpression"), nodeOf("JsxIdentifier")),
-    property: nodeOf("JsxIdentifier"),
+    object: oneOf(nodeOf("JSXMemberExpression"), nodeOf("JSXIdentifier")),
+    property: nodeOf("JSXIdentifier"),
   },
   builder: [],
   visitor: [],
 };
 
-export const JsxSpreadAttribute = {
-  type: "JsxSpreadAttribute",
+export const JSXSpreadAttribute = {
+  type: "JSXSpreadAttribute",
   extends: ["Node"],
   fields: {
     argument: nodeOf("Expression"),
@@ -115,8 +115,8 @@ export const JsxSpreadAttribute = {
   visitor: [],
 };
 
-export const JsxText = {
-  type: "JsxText",
+export const JSXText = {
+  type: "JSXText",
   extends: ["Node"],
   fields: {
     value: typeOf("string"),

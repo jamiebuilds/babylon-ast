@@ -1,5 +1,5 @@
 // @flow
-import {oneOf, nodeOf, typeOf} from "../_validators";
+import {oneOf, nodeOf, typeOf} from "../_define";
 
 export const TypeAliasDeclaration = {
   type: "TypeAliasDeclaration",
@@ -9,7 +9,7 @@ export const TypeAliasDeclaration = {
     typeParameters: oneOf(nodeOf("TypeParameterDeclaration"), typeOf("null")),
     right: nodeOf("TypeAnnotation"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["id", "typeParameters", "right"],
+  visitor: ["id", "typeParameters", "right"],
 };
 

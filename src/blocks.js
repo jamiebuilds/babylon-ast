@@ -1,5 +1,5 @@
 // @flow
-import {arrayOf, nodeOf} from "./_validators";
+import {arrayOf, nodeOf} from "./_define";
 
 export const BlockStatement = {
   type: "BlockStatement",
@@ -8,6 +8,6 @@ export const BlockStatement = {
     body: arrayOf(nodeOf("Statement")),
     directives: arrayOf(nodeOf("Directive")),
   },
-  builder: [],
-  visitor: [],
+  builder: ["body", "directives"],
+  visitor: ["directives", "body"],
 };

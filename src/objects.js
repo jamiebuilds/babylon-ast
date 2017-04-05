@@ -1,5 +1,15 @@
 // @flow
-import {oneOf, arrayOf, nodeOf, typeOf} from "./_validators";
+import {aliasOf, oneOf, arrayOf, nodeOf, typeOf} from "./_define";
+
+export const ObjectExpression = {
+  type: "ObjectExpression",
+  extends: ["Expression"],
+  fields: {
+    properties: arrayOf(oneOf(nodeOf("ObjectMember"), nodeOf("SpreadElement"))),
+  },
+  builder: ["properties"],
+  visitor: ["properties"],
+};
 
 export const ObjectMember = {
   extends: ["Node"],
@@ -17,8 +27,8 @@ export const ObjectProperty = {
     shorthand: typeOf("boolean"),
     value: nodeOf("Expression"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["key", "value", "computed", "shorthand", "decorators"],
+  visitor: ["key", "value", "decorators"],
 };
 
 export const ObjectMethodKind = oneOf(
@@ -31,18 +41,8 @@ export const ObjectMethod = {
   type: "ObjectMethod",
   extends: ["ObjectMember", "Method"],
   fields: {
-    kind: ObjectMethodKind,
+    kind: aliasOf("ObjectMethodKind"),
   },
-  builder: [],
-  visitor: [],
-};
-
-export const ObjectExpression = {
-  type: "ObjectExpression",
-  extends: ["Expression"],
-  fields: {
-    properties: arrayOf(oneOf(nodeOf("ObjectMember"), nodeOf("SpreadElement"))),
-  },
-  builder: [],
-  visitor: [],
+  builder: ["kind", "key", "params", "body", "computed"],
+  visitor: ["key", "params", "body", "decorators", "returnType", "typeParameters"],
 };

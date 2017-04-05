@@ -1,6 +1,6 @@
 // @flow
 
-import {oneOf, arrayOf, typeOf, objectOf} from "./_validators";
+import {oneOf, arrayOf, typeOf, objectOf, aliasOf} from "./_define";
 
 export const SourcePosition = objectOf({
   line: typeOf("number"),
@@ -9,8 +9,8 @@ export const SourcePosition = objectOf({
 
 export const SourceLocation = objectOf({
   source: oneOf(typeOf("string"), typeOf("null")),
-  start: SourcePosition,
-  end: SourcePosition,
+  start: aliasOf("SourcePosition"),
+  end: aliasOf("SourcePosition"),
 });
 
 export const Comment = objectOf({
@@ -18,19 +18,27 @@ export const Comment = objectOf({
   value: typeOf("string"),
   start: typeOf("number"),
   end: typeOf("number"),
-  loc: SourceLocation,
+  loc: aliasOf("SourceLocation"),
 });
 
 export const Node = {
   fields: {
-    loc: oneOf(SourceLocation, typeOf("null")),
-    start: typeOf("number"),
-    end: typeOf("number"),
+    loc: oneOf(aliasOf("SourceLocation"), typeOf("null")),
+    start: oneOf(typeOf("number"), typeOf("null")),
+    end: oneOf(typeOf("number"), typeOf("null")),
 
-    leadingComments: oneOf(arrayOf(Comment), typeOf("null")),
-    trailingComments: oneOf(arrayOf(Comment), typeOf("null")),
-    innerComments: oneOf(arrayOf(Comment), typeOf("null")),
+    leadingComments: oneOf(arrayOf(aliasOf("Comment")), typeOf("null")),
+    trailingComments: oneOf(arrayOf(aliasOf("Comment")), typeOf("null")),
+    innerComments: oneOf(arrayOf(aliasOf("Comment")), typeOf("null")),
   },
+  defaults: {
+    loc: null,
+    start: null,
+    end: null,
+    leadingComments: null,
+    trailingComments: null,
+    innerComments: null,
+  }
 };
 
 export const Expression = {

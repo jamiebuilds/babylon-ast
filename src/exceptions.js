@@ -1,5 +1,5 @@
 // @flow
-import {oneOf, nodeOf, typeOf} from "./_validators";
+import {oneOf, nodeOf, typeOf} from "./_define";
 
 export const ThrowStatement = {
   type: "ThrowStatement",
@@ -7,19 +7,8 @@ export const ThrowStatement = {
   fields: {
     argument: nodeOf("Expression"),
   },
-  builder: [],
-  visitor: [],
-};
-
-export const CatchClause = {
-  type: "CatchClause",
-  extends: ["Node"],
-  fields: {
-    param: nodeOf("Pattern"),
-    body: nodeOf("BlockStatement"),
-  },
-  builder: [],
-  visitor: [],
+  builder: ["argument"],
+  visitor: ["argument"],
 };
 
 export const TryStatement = {
@@ -30,6 +19,17 @@ export const TryStatement = {
     handler: oneOf(nodeOf("CatchClause"), typeOf("null")),
     finalizer: oneOf(nodeOf("BlockStatement"), typeOf("null")),
   },
-  builder: [],
-  visitor: [],
+  builder: ["block", "handler", "finalizer"],
+  visitor: ["block", "handler", "finalizer"],
+};
+
+export const CatchClause = {
+  type: "CatchClause",
+  extends: ["Node"],
+  fields: {
+    param: nodeOf("Pattern"),
+    body: nodeOf("BlockStatement"),
+  },
+  builder: ["param", "body"],
+  visitor: ["param", "body"],
 };

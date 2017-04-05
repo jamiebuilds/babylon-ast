@@ -1,6 +1,5 @@
 // @flow
-import {arrayOf, oneOf, nodeOf, typeOf} from "../_validators";
-import {ObjectMethodKind} from "../objects";
+import {aliasOf, arrayOf, oneOf, nodeOf, typeOf} from "../_define";
 
 export const ObjectTypeAnnotation = {
   type: "ObjectTypeAnnotation",
@@ -40,7 +39,7 @@ export const ObjectTypeMethod = {
   type: "ObjectTypeMethod",
   extends: ["ObjectTypeMember"],
   fields: {
-    kind: ObjectMethodKind,
+    kind: aliasOf("ObjectMethodKind"),
     params: arrayOf(nodeOf("FunctionTypeParam")),
     rest: oneOf(nodeOf("FunctionTypeParam"), typeOf("null")),
     returnType: nodeOf("TypeAnnotation"),

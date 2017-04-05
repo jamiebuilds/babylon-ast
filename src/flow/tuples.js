@@ -1,5 +1,5 @@
 // @flow
-import {arrayOf, nodeOf} from "../_validators";
+import {arrayOf, nodeOf} from "../_define";
 
 export const TupleTypeAnnotation = {
   type: "TupleTypeAnnotation",

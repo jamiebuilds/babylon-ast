@@ -1,5 +1,5 @@
 // @flow
-import {oneOf, arrayOf, nodeOf, typeOf} from "./_validators";
+import {oneOf, arrayOf, nodeOf, typeOf} from "./_define";
 
 export const Import = {
   type: "Import",
@@ -23,8 +23,8 @@ export const ImportSpecifier = {
     local: nodeOf("Identifier"),
     imported: nodeOf("Identifier"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["local", "imported"],
+  visitor: ["local", "imported"],
 };
 
 export const ImportDefaultSpecifier = {
@@ -33,8 +33,8 @@ export const ImportDefaultSpecifier = {
   fields: {
     local: nodeOf("Identifier"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["local"],
+  visitor: ["local"],
 };
 
 export const ImportNamespaceSpecifier = {
@@ -43,8 +43,8 @@ export const ImportNamespaceSpecifier = {
   fields: {
     local: nodeOf("Identifier"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["local"],
+  visitor: ["local"],
 };
 
 export const ImportDeclaration = {
@@ -54,8 +54,8 @@ export const ImportDeclaration = {
     specifiers: arrayOf(oneOf(nodeOf("ImportSpecifier"), nodeOf("ImportDefaultSpecifier"), nodeOf("ImportNamespaceSpecifier"))),
     source: nodeOf("Literal"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["specifiers", "source"],
+  visitor: ["specifiers", "source"],
 };
 
 export const ExportSpecifier = {
@@ -65,8 +65,8 @@ export const ExportSpecifier = {
     local: nodeOf("Identifier"),
     exported: nodeOf("Identifier"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["local", "exported"],
+  visitor: ["local", "exported"],
 };
 
 export const ExportDefaultSpecifier = {
@@ -75,8 +75,8 @@ export const ExportDefaultSpecifier = {
   fields: {
     exported: nodeOf("Identifier"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["exported"],
+  visitor: ["exported"],
 };
 
 export const ExportNamespaceSpecifier = {
@@ -85,8 +85,8 @@ export const ExportNamespaceSpecifier = {
   fields: {
     exported: nodeOf("Identifier"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["exported"],
+  visitor: ["exported"],
 };
 
 export const ExportNamedDeclaration = {
@@ -97,8 +97,8 @@ export const ExportNamedDeclaration = {
     specifiers: arrayOf(oneOf(nodeOf("ExportSpecifier"), nodeOf("ExportDefaultSpecifier"), nodeOf("ExportNamespaceSpecifier"))),
     source: oneOf(nodeOf("Literal"), typeOf("null")),
   },
-  builder: [],
-  visitor: [],
+  builder: ["declaration", "specifiers", "source"],
+  visitor: ["declaration", "specifiers", "source"],
 };
 
 export const ExportDefaultDeclaration = {
@@ -107,8 +107,8 @@ export const ExportDefaultDeclaration = {
   fields: {
     declaration: oneOf(nodeOf("Declaration"), nodeOf("Expression")),
   },
-  builder: [],
-  visitor: [],
+  builder: ["declaration"],
+  visitor: ["declaration"],
 };
 
 export const ExportAllDeclaration = {
@@ -117,6 +117,6 @@ export const ExportAllDeclaration = {
   fields: {
     source: nodeOf("Literal"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["source"],
+  visitor: ["source"],
 };

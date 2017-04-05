@@ -1,12 +1,13 @@
 // @flow
-import {nodeOf} from "./_validators";
+import {nodeOf, oneOf, typeOf} from "./_define";
 
 export const RestElement = {
   type: "RestElement",
   extends: ["Pattern"],
   fields: {
     argument: nodeOf("Pattern"),
+    typeAnnotation: oneOf(nodeOf("TypeAnnotation"), typeOf('null')),
   },
-  builder: [],
-  visitor: [],
+  builder: ["argument", "typeAnnotation"],
+  visitor: ["argument", "typeAnnotation"],
 };

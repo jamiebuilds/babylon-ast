@@ -1,5 +1,5 @@
 // @flow
-import {arrayOf, nodeOf} from "./_validators";
+import {arrayOf, nodeOf} from "./_define";
 
 export const ExpressionStatement = {
   type: "ExpressionStatement",
@@ -7,8 +7,8 @@ export const ExpressionStatement = {
   fields: {
     expression: nodeOf("Expression"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["expression"],
+  visitor: ["expression"],
 };
 
 export const SequenceExpression = {
@@ -17,8 +17,8 @@ export const SequenceExpression = {
   fields: {
     expressions: arrayOf(nodeOf("Expression")),
   },
-  builder: [],
-  visitor: [],
+  builder: ["expressions"],
+  visitor: ["expressions"],
 };
 
 export const EmptyStatement = {

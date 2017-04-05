@@ -1,5 +1,5 @@
 // @flow
-import {nodeOf} from "./_validators";
+import {nodeOf} from "./_define";
 
 export const SpreadElement = {
   type: "SpreadElement",
@@ -7,6 +7,6 @@ export const SpreadElement = {
   fields: {
     argument: nodeOf("Expression"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["argument"],
+  visitor: ["argument"],
 };

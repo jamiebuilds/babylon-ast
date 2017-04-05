@@ -1,5 +1,5 @@
 // @flow
-import {typeOf, objectOf} from "./_validators";
+import {typeOf, objectOf} from "./_define";
 
 export const Literal = {
   extends: ["Expression"]
@@ -12,7 +12,7 @@ export const RegExpLiteral = {
     pattern: typeOf("string"),
     flags: typeOf("string"),
   },
-  builder: [],
+  builder: ["pattern", "flags"],
   visitor: [],
 };
 
@@ -33,7 +33,7 @@ export const StringLiteral = {
       raw: typeOf("string"),
     }),
   },
-  builder: [],
+  builder: ["value"],
   visitor: [],
 };
 
@@ -43,7 +43,7 @@ export const BooleanLiteral = {
   fields: {
     value: typeOf("boolean"),
   },
-  builder: [],
+  builder: ["value"],
   visitor: [],
 };
 
@@ -57,6 +57,6 @@ export const NumericLiteral = {
       raw: typeOf("string"),
     }),
   },
-  builder: [],
+  builder: ["value"],
   visitor: [],
 };

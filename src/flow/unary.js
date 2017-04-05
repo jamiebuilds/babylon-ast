@@ -1,5 +1,5 @@
 // @flow
-import {oneOf, nodeOf} from "../_validators";
+import {oneOf, nodeOf} from "../_define";
 
 export const UnaryTypeAnnotation = {
   extends: ["TypeAnnotation"],

@@ -1,5 +1,5 @@
 // @flow
-import {oneOf} from "../_validators";
+import {aliasOf, oneOf} from "../_define";
 
 export const VarianceKind = oneOf(
   "plus",
@@ -10,7 +10,7 @@ export const Variance = {
   type: "Variance",
   extends: ["Node"],
   fields: {
-    kind: VarianceKind,
+    kind: aliasOf("VarianceKind"),
   },
   builder: [],
   visitor: [],

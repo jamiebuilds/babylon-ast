@@ -1,5 +1,5 @@
 // @flow
-import {oneOf, arrayOf, nodeOf, typeOf} from "./_validators";
+import {oneOf, arrayOf, nodeOf, typeOf} from "./_define";
 
 export const Method = {
   extends: ["Node"],
@@ -9,7 +9,7 @@ export const Method = {
     body: oneOf(nodeOf("BlockStatement"), nodeOf("Expression")),
     generator: typeOf("boolean"),
     async: typeOf("boolean"),
+    returnType: oneOf(nodeOf("TypeAnnotation"), typeOf('null')),
+    typeParameters: oneOf(nodeOf("TypeParameterDeclaration"), typeOf("null")),
   },
-  builder: [],
-  visitor: [],
 };

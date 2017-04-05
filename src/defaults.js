@@ -1,5 +1,5 @@
 // @flow
-import {nodeOf} from "./_validators";
+import {nodeOf} from "./_define";
 
 export const AssignmentPattern = {
   type: "AssignmentPattern",
@@ -8,6 +8,6 @@ export const AssignmentPattern = {
     left: nodeOf("Pattern"),
     right: nodeOf("Expression"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["left", "right"],
+  visitor: ["left", "right"],
 };

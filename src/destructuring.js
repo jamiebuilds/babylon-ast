@@ -1,14 +1,15 @@
 // @flow
-import {oneOf, arrayOf, nodeOf, typeOf} from "./_validators";
+import {oneOf, arrayOf, nodeOf, typeOf} from "./_define";
 
 export const ArrayPattern = {
   type: "ArrayPattern",
   extends: ["Pattern"],
   fields: {
     elements: arrayOf(oneOf(nodeOf("Pattern"), typeOf("null"))),
+    typeAnnotation: oneOf(nodeOf("TypeAnnotation"), typeOf('null')),
   },
-  builder: [],
-  visitor: [],
+  builder: ["elements", "typeAnnotation"],
+  visitor: ["elements", "typeAnnotation"],
 };
 
 export const AssignmentProperty = {
@@ -17,8 +18,8 @@ export const AssignmentProperty = {
   fields: {
     // value: nodeOf("Pattern"), <<<<<<<<<<<<<< wat
   },
-  builder: [],
-  visitor: [],
+  builder: [], // <<<<<<<<
+  visitor: [], // <<<<<<<<
 };
 
 export const ObjectPattern = {
@@ -26,7 +27,8 @@ export const ObjectPattern = {
   extends: ["Pattern"],
   fields: {
     properties: arrayOf(oneOf(nodeOf("AssignmentProperty"), nodeOf("RestElement"))),
+    typeAnnotation: oneOf(nodeOf("TypeAnnotation"), typeOf('null')),
   },
-  builder: [],
-  visitor: [],
+  builder: ["properties", "typeAnnotation"],
+  visitor: ["properties", "typeAnnotation"],
 };

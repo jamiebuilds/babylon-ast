@@ -1,5 +1,5 @@
 // @flow
-import {nodeOf} from "./_validators";
+import {nodeOf} from "./_define";
 
 export const DoExpression = {
   type: "DoExpression",
@@ -7,6 +7,6 @@ export const DoExpression = {
   fields: {
     body: nodeOf("BlockStatement"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["body"],
+  visitor: ["body"],
 };

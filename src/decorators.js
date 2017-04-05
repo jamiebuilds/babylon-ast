@@ -1,5 +1,5 @@
 // @flow
-import {nodeOf} from "./_validators";
+import {nodeOf} from "./_define";
 
 export const Decorator = {
   type: "Decorator",
@@ -7,6 +7,6 @@ export const Decorator = {
   fields: {
     expression: nodeOf("Expression"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["expression"],
+  visitor: ["expression"],
 };

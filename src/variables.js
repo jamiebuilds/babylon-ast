@@ -1,16 +1,5 @@
 // @flow
-import {oneOf, arrayOf, nodeOf, typeOf} from "./_validators";
-
-export const VariableDeclarator = {
-  type: "VariableDeclarator",
-  extends: ["Node"],
-  fields: {
-    id: nodeOf("Pattern"),
-    init: oneOf(nodeOf("Expression"), typeOf("null")),
-  },
-  builder: [],
-  visitor: [],
-};
+import {oneOf, arrayOf, nodeOf, typeOf} from "./_define";
 
 export const VariableDeclaration = {
   type: "VariableDeclaration",
@@ -19,6 +8,17 @@ export const VariableDeclaration = {
     declarations: arrayOf(nodeOf("VariableDeclarator")),
     kind: oneOf("var", "let", "const"),
   },
-  builder: [],
-  visitor: [],
+  builder: ["kind", "declarations"],
+  visitor: ["declarations"],
+};
+
+export const VariableDeclarator = {
+  type: "VariableDeclarator",
+  extends: ["Node"],
+  fields: {
+    id: nodeOf("Pattern"),
+    init: oneOf(nodeOf("Expression"), typeOf("null")),
+  },
+  builder: ["id", "init"],
+  visitor: ["id", "init"],
 };

@@ -1,5 +1,5 @@
 // @flow
-import {oneOf, arrayOf, nodeOf} from "./_validators";
+import {oneOf, arrayOf, nodeOf} from "./_define";
 
 export const Program = {
   type: "Program",
@@ -9,6 +9,6 @@ export const Program = {
     body: arrayOf(oneOf(nodeOf("Statement"), nodeOf("ModuleDeclaration"))),
     directives: arrayOf(nodeOf("Directive")),
   },
-  builder: [],
-  visitor: [],
+  builder: ["body", "directives"],
+  visitor: ["directives", "body"],
 };
